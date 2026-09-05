@@ -779,7 +779,7 @@ body[data-theme="light"] .preview-label {
   max-width: calc(100% - 28px);
   overflow: hidden;
   white-space: nowrap;
-  margin-top: 12px;
+  margin-top: 15px;
   margin-left: 22px
 }
 
