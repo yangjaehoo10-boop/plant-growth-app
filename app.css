@@ -780,7 +780,7 @@ body[data-theme="light"] .preview-label {
   overflow: hidden;
   white-space: nowrap;
   margin-top: 12px;
-  margin-left: -2px
+  margin-left: -8px
 }
 
 .hud-corners {
