@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>식물 성장 분석기 | 강낭콩 &amp; 상추 D-Day 예측</title>
+  <!-- PWA 설정 -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="apple-touch-icon" href="/icon-192.png">
   <meta name="description" content="식물의 현재 생육 단계를 사진으로 분석하고, 완전 성장까지 남은 D-Day와 예상 완료일을 계산해주는 스마트 원예 앱입니다.">
   <link rel="stylesheet" href="app.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
 </head>
+
 <body>
 
   <!-- 모바일 스마트폰 전용 컨테이너 -->
   <main class="mobile-app-container">
-    
+
     <!-- 앱 상단 고정 헤더 -->
     <header class="app-header">
       <div class="header-brand">
@@ -24,7 +32,8 @@
       </div>
       <div class="header-actions">
         <button id="btn-view-history" class="btn-icon" title="성장 일지" aria-label="성장 일지 열기">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
             <path d="M6 6h10"></path>
             <path d="M6 10h10"></path>
@@ -49,7 +58,8 @@
         <!-- 2가지 선택 카드 -->
         <div class="plant-cards-grid">
           <!-- 강낭콩 카드 -->
-          <article class="plant-choice-card selected" data-plant="bean" tabindex="0" role="button" aria-pressed="true" aria-label="강낭콩 선택">
+          <article class="plant-choice-card selected" data-plant="bean" tabindex="0" role="button" aria-pressed="true"
+            aria-label="강낭콩 선택">
             <div class="card-badge">✓</div>
             <div class="card-avatar">🌱</div>
             <h3 class="plant-name">강낭콩</h3>
@@ -58,7 +68,8 @@
           </article>
 
           <!-- 상추 카드 -->
-          <article class="plant-choice-card" data-plant="lettuce" tabindex="0" role="button" aria-pressed="false" aria-label="상추 선택">
+          <article class="plant-choice-card" data-plant="lettuce" tabindex="0" role="button" aria-pressed="false"
+            aria-label="상추 선택">
             <div class="card-badge">✓</div>
             <div class="card-avatar">🥬</div>
             <h3 class="plant-name">상추</h3>
@@ -73,7 +84,7 @@
             <span class="guide-title-text">🌿 생육 가이드</span>
             <div id="preview-plant-name" class="guide-plant-chip">🌱 강낭콩</div>
           </div>
-          
+
           <div class="preview-grid">
             <div class="preview-item">
               <span class="preview-label">재배 기간</span>
@@ -104,7 +115,8 @@
         <!-- Sticky CTA 버튼 -->
         <div class="sticky-cta">
           <button id="btn-go-to-camera" class="btn-primary" type="button">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
               <circle cx="12" cy="13" r="4"></circle>
             </svg>
@@ -118,13 +130,14 @@
         <div class="camera-topbar">
           <button id="btn-back-to-select" class="btn-icon" title="이전으로" aria-label="식물 선택으로 돌아가기">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
+              <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
           <h2 id="camera-title" class="camera-topbar-title">식물 잎 사진 촬영</h2>
           <button id="btn-switch-cam" class="btn-icon" title="카메라 전환" aria-label="전면/후면 카메라 전환">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 10c0-4.418-3.582-8-8-8s-8 3.582-8 8c0 2.21 1.005 4.21 2.613 5.587l-1.613 1.413 5 1-1-5-1.42 1.243C6.386 13.153 5.5 11.688 5.5 10c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5-2.91 6.5-6.5 6.5c-1.393 0-2.679-.439-3.73-1.189l-1.07 1.07C8.558 18.397 10.198 19 12 19c4.418 0 8-3.582 8-8z"/>
+              <path
+                d="M20 10c0-4.418-3.582-8-8-8s-8 3.582-8 8c0 2.21 1.005 4.21 2.613 5.587l-1.613 1.413 5 1-1-5-1.42 1.243C6.386 13.153 5.5 11.688 5.5 10c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5-2.91 6.5-6.5 6.5c-1.393 0-2.679-.439-3.73-1.189l-1.07 1.07C8.558 18.397 10.198 19 12 19c4.418 0 8-3.582 8-8z" />
             </svg>
           </button>
         </div>
@@ -164,9 +177,9 @@
           <button id="btn-upload-trigger" class="ctrl-side-btn" type="button">
             <div class="icon-circle">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <circle cx="8.5" cy="8.5" r="1.5"/>
-                <polyline points="21 15 16 10 5 21"/>
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
               </svg>
             </div>
             <span>앨범 업로드</span>
@@ -177,7 +190,7 @@
           <div id="btn-shutter" class="shutter-btn-outer" role="button" tabindex="0" aria-label="사진 촬영">
             <div class="shutter-btn-inner">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#030705" stroke-width="2.5">
-                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="9" />
               </svg>
             </div>
           </div>
@@ -189,8 +202,9 @@
         <div class="sample-presets-box">
           <button class="sample-toggle-btn" id="btn-sample-toggle" aria-expanded="false" aria-controls="sample-content">
             <span>⚡ 샘플 이미지로 즉시 테스트</span>
-            <svg class="toggle-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="6 9 12 15 18 9"/>
+            <svg class="toggle-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9" />
             </svg>
           </button>
           <div id="sample-content" class="sample-content" aria-hidden="true">
@@ -203,7 +217,8 @@
 
       <!-- ================= 3단계: 스캔 분석 중 화면 ================= -->
       <section id="screen-scanning" class="screen scan-screen" aria-labelledby="scan-title">
-        <h2 id="scan-title" style="font-size: 0.95rem; color: var(--accent-lime); margin-bottom: 4px; font-weight: 700;">
+        <h2 id="scan-title"
+          style="font-size: 0.95rem; color: var(--accent-lime); margin-bottom: 4px; font-weight: 700;">
           식물 생육 상태 분석
         </h2>
 
@@ -211,7 +226,7 @@
           <img id="scan-img-preview" alt="스캔 대상 이미지">
           <div class="scan-grid-overlay"></div>
           <div class="scan-laser"></div>
-          
+
           <div id="scan-bounding-box" class="scan-bounding-box">
             <span id="scan-box-label" class="box-label">분석 진행 중...</span>
           </div>
@@ -227,7 +242,7 @@
 
       <!-- ================= 4단계: 분석 결과 & D-Day 리포트 화면 ================= -->
       <section id="screen-report" class="screen" aria-labelledby="report-title">
-        
+
         <div class="report-header">
           <div>
             <div id="report-plant-badge" class="plant-analyzed-badge">
@@ -243,7 +258,7 @@
             <div id="report-dday-num" class="dday-number">D-28</div>
             <div class="dday-tag">남음</div>
           </div>
-          
+
           <div id="report-harvest-date" class="harvest-expected-date">
             <span>📅 예상 완료일: <strong>2026년 10월 2일경</strong></span>
           </div>
@@ -257,7 +272,8 @@
             <div class="progress-track">
               <div id="report-progress-fill" class="progress-fill" style="width: 15%;"></div>
             </div>
-            <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.72rem; color: #94a3b8;">
+            <div
+              style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.72rem; color: #94a3b8;">
               <span id="report-elapsed-days">잔여 28일 / 총 60일 주기</span>
               <span>총 100% 성장</span>
             </div>
@@ -268,7 +284,7 @@
         <div class="morph-diagnostic-card">
           <div class="morph-card-title">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg>
             <span>생육 상태 진단</span>
           </div>
@@ -392,5 +408,16 @@
       });
     }
   </script>
+  <!-- 서비스 워커 등록 -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('PWA Service Worker 등록 성공:', reg))
+          .catch(err => console.error('PWA Service Worker 등록 실패:', err));
+      });
+    }
+  </script>
 </body>
+
 </html>
