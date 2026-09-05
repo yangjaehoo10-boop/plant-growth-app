@@ -460,6 +460,90 @@
       installModal.style.display = 'none';
     });
   </script>
+  <!-- 카카오톡 / PWA 통합 안내 모달 -->
+  <div id="pwa-install-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:99999; color:white; text-align:center; padding:40px 20px; box-sizing:border-box; flex-direction:column; justify-content:center; align-items:center;">
+    <h2 id="modal-title" style="font-size:22px; margin-bottom:12px; word-break:keep-all;">📱 앱 설치 후 이용 가능합니다</h2>
+    <p id="modal-desc" style="margin-bottom:25px; color:#ccc; line-height:1.6; font-size:15px; word-break:keep-all;">
+      식물 진단 서비스를 이용하려면<br>아래 버튼을 눌러 홈 화면에 앱을 설치해 주세요.
+    </p>
+    <button id="btn-pwa-install"
+      style="background:#2e7d32; color:white; border:none; padding:16px 28px; font-size:17px; font-weight:bold; border-radius:12px; cursor:pointer; width:85%; max-width:320px;">
+      앱 설치하고 시작하기
+    </button>
+  </div>
+
+  <!-- 카카오톡 감지 및 PWA 강제 설치 스크립트 -->
+  <script>
+    (function () {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isKakaoTalk = userAgent.includes('kakaotalk');
+      const isAndroid = userAgent.includes('android');
+      const isIOS = /iphone|ipad|ipod/.test(userAgent);
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+      const modal = document.getElementById('pwa-install-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalDesc = document.getElementById('modal-desc');
+      const installBtn = document.getElementById('btn-pwa-install');
+
+      // 1. 카카오톡 내부 브라우저 처리
+      if (isKakaoTalk) {
+        if (isAndroid) {
+          // 안드로이드 카카오톡 -> 자동으로 크롬 브라우저 강제 실행
+          const targetUrl = location.href.replace(/https?:\/\//i, '');
+          location.href = `intent://${targetUrl}#Intent;scheme=https;package=com.android.chrome;end;`;
+          return;
+        } else if (isIOS) {
+          // 아이폰 카카오톡 -> 외부 브라우저(Safari)로 열기 안내 팝업 표시
+          modal.style.display = 'flex';
+          modalTitle.innerText = '🌐 외부 브라우저로 열어주세요';
+          modalDesc.innerHTML = '카카오톡에서는 앱 설치가 제한됩니다.<br><br>우측 하단 <b>점 3개(···)</b> 또는 <b>공유 버튼</b>을 누른 후<br><b>"다른 브라우저로 열기"</b>를 선택해 주세요.';
+          installBtn.style.display = 'none'; // 아이폰 카톡에선 설치버튼 숨김
+          return;
+        }
+      }
+
+      // 2. 이미 설치된 앱으로 실행 중이면 팝업 안 끰
+      if (isStandalone) {
+        return;
+      }
+
+      // 3. 아이폰(Safari) 일반 접속 시 안내
+      if (isIOS && !isKakaoTalk) {
+        modal.style.display = 'flex';
+        modalTitle.innerText = '📱 홈 화면에 앱을 추가해 주세요';
+        modalDesc.innerHTML = '하단 중앙의 <b>공유 버튼(네모+화살표 ↑)</b>을 누른 뒤<br><b>"홈 화면에 추가"</b>를 눌러 설치해 주세요!';
+        installBtn.style.display = 'none';
+        return;
+      }
+
+      // 4. 안드로이드 크롬/일반 브라우저 접속 시
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        modal.style.display = 'flex';
+      });
+
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            modal.style.display = 'none';
+          }
+          deferredPrompt = null;
+        } else {
+          alert('크롬 상단 메뉴(⋮)에서 "앱 설치" 또는 "홈 화면에 추가"를 직접 선택해 주세요.');
+        }
+      });
+
+      window.addEventListener('appinstalled', () => {
+        modal.style.display = 'none';
+      });
+    })();
+  </script>
 </body>
 
 </html>
