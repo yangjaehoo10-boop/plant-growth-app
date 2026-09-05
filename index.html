@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>식물 성장 분석기 | 강낭콩 &amp; 상추 D-Day 예측</title>
+  <meta name="description" content="식물의 현재 생육 단계를 사진으로 분석하고, 완전 성장까지 남은 D-Day와 예상 완료일을 계산해주는 스마트 원예 앱입니다.">
+  <link rel="stylesheet" href="app.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+</head>
+<body>
+
+  <!-- 모바일 스마트폰 전용 컨테이너 -->
+  <main class="mobile-app-container">
+    
+    <!-- 앱 상단 고정 헤더 -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="header-logo-icon" aria-hidden="true">🌱</div>
+        <div>
+          <h1 class="header-title">식물 성장 분석기</h1>
+          <p class="header-sub">D-Day 예측 &amp; 생육 진단</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-view-history" class="btn-icon" title="성장 일지" aria-label="성장 일지 열기">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+            <path d="M6 6h10"></path>
+            <path d="M6 10h10"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 스크롤 가능한 메인 화면 영역 -->
+    <div class="app-screen-container">
+
+      <!-- ================= 1단계: 식물 선택 화면 ================= -->
+      <section id="screen-select" class="screen active" aria-labelledby="select-title">
+        <div class="hero-banner">
+          <div class="hero-pill">
+            <span>🌿 식물 선택</span>
+          </div>
+          <h2 id="select-title" class="hero-title">키우시는 식물을<br><span>선택해주세요</span></h2>
+          <p class="hero-desc">사진을 업로드하면 현재 생육 단계와<br>남은 D-Day를 분석해 드립니다.</p>
+        </div>
+
+        <!-- 2가지 선택 카드 -->
+        <div class="plant-cards-grid">
+          <!-- 강낭콩 카드 -->
+          <article class="plant-choice-card selected" data-plant="bean" tabindex="0" role="button" aria-pressed="true" aria-label="강낭콩 선택">
+            <div class="card-badge">✓</div>
+            <div class="card-avatar">🌱</div>
+            <h3 class="plant-name">강낭콩</h3>
+            <p class="plant-eng">Kidney Bean</p>
+            <div class="plant-cycle-tag">평균 60일</div>
+          </article>
+
+          <!-- 상추 카드 -->
+          <article class="plant-choice-card" data-plant="lettuce" tabindex="0" role="button" aria-pressed="false" aria-label="상추 선택">
+            <div class="card-badge">✓</div>
+            <div class="card-avatar">🥬</div>
+            <h3 class="plant-name">상추</h3>
+            <p class="plant-eng">Lettuce</p>
+            <div class="plant-cycle-tag">평균 40일</div>
+          </article>
+        </div>
+
+        <!-- 생육 가이드 카드 -->
+        <div class="plant-detail-preview">
+          <div class="guide-header">
+            <span class="guide-title-text">🌿 생육 가이드</span>
+            <div id="preview-plant-name" class="guide-plant-chip">🌱 강낭콩</div>
+          </div>
+          
+          <div class="preview-grid">
+            <div class="preview-item">
+              <span class="preview-label">재배 기간</span>
+              <span id="preview-total-days" class="preview-val">약 60일</span>
+            </div>
+            <div class="preview-item">
+              <span class="preview-label">적정 온도</span>
+              <span id="preview-optimal-temp" class="preview-val">20°C ~ 25°C</span>
+            </div>
+            <div class="preview-item">
+              <span class="preview-label">일조량</span>
+              <span id="preview-sunlight" class="preview-val">6시간 이상</span>
+            </div>
+            <div class="preview-item">
+              <span class="preview-label">물주기</span>
+              <span id="preview-watering" class="preview-val">2일 1회</span>
+            </div>
+          </div>
+
+          <!-- 심플 뱃지 칩 영역 -->
+          <div class="info-chips">
+            <div class="info-chip">📊 <span id="preview-stages-count">3단계 생육 모델</span></div>
+            <div class="info-chip">🔬 형태학적 정밀 판별</div>
+            <div class="info-chip">📅 D-Day 자동 계산</div>
+          </div>
+        </div>
+
+        <!-- Sticky CTA 버튼 -->
+        <div class="sticky-cta">
+          <button id="btn-go-to-camera" class="btn-primary" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+            식물 사진 촬영하기
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= 2단계: 카메라 촬영 & 업로드 화면 ================= -->
+      <section id="screen-camera" class="screen" aria-labelledby="camera-title">
+        <div class="camera-topbar">
+          <button id="btn-back-to-select" class="btn-icon" title="이전으로" aria-label="식물 선택으로 돌아가기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <h2 id="camera-title" class="camera-topbar-title">식물 잎 사진 촬영</h2>
+          <button id="btn-switch-cam" class="btn-icon" title="카메라 전환" aria-label="전면/후면 카메라 전환">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 10c0-4.418-3.582-8-8-8s-8 3.582-8 8c0 2.21 1.005 4.21 2.613 5.587l-1.613 1.413 5 1-1-5-1.42 1.243C6.386 13.153 5.5 11.688 5.5 10c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5-2.91 6.5-6.5 6.5c-1.393 0-2.679-.439-3.73-1.189l-1.07 1.07C8.558 18.397 10.198 19 12 19c4.418 0 8-3.582 8-8z"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 카메라 뷰파인더 뷰 -->
+        <div class="camera-wrapper">
+          <video id="camera-video" playsinline autoplay muted></video>
+          <img id="preview-img" alt="촬영 미리보기" style="display: none;">
+          <canvas id="analysis-canvas" style="display: none;"></canvas>
+
+          <!-- 뷰파인더 HUD 오버레이 -->
+          <div class="viewfinder-hud">
+            <!-- HUD 태그: 절대 포지션으로 뷰파인더 내부에만 표시 -->
+            <div class="hud-info-tag">
+              <span class="status-pulse"></span>
+              <span>피사체 감지 중</span>
+            </div>
+
+            <div class="hud-corners">
+              <div class="corner-tl"></div>
+              <div class="corner-tr"></div>
+              <div class="corner-bl"></div>
+              <div class="corner-br"></div>
+              <div class="reticle-center">
+                <div class="reticle-dot"></div>
+              </div>
+            </div>
+
+            <div class="hud-bottom-hint">
+              <span class="hud-hint-text">화면 중앙에 식물의 잎과 줄기를 맞춰주세요</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 셔터 및 컨트롤 바 -->
+        <div class="camera-controls">
+          <button id="btn-upload-trigger" class="ctrl-side-btn" type="button">
+            <div class="icon-circle">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <span>앨범 업로드</span>
+          </button>
+
+          <input type="file" id="plantFileInput" style="display:none;" accept="image/*">
+
+          <div id="btn-shutter" class="shutter-btn-outer" role="button" tabindex="0" aria-label="사진 촬영">
+            <div class="shutter-btn-inner">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#030705" stroke-width="2.5">
+                <circle cx="12" cy="12" r="9"/>
+              </svg>
+            </div>
+          </div>
+
+          <div style="width: 50px;"></div>
+        </div>
+
+        <!-- 샘플 프리셋: 아코디언 토글 -->
+        <div class="sample-presets-box">
+          <button class="sample-toggle-btn" id="btn-sample-toggle" aria-expanded="false" aria-controls="sample-content">
+            <span>⚡ 샘플 이미지로 즉시 테스트</span>
+            <svg class="toggle-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div id="sample-content" class="sample-content" aria-hidden="true">
+            <div id="sample-scroll" class="sample-scroll">
+              <!-- 자바스크립트로 1단계(떡잎기), 2단계(본잎성장기), 3단계(성숙기) 자동 렌더링 -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 3단계: 스캔 분석 중 화면 ================= -->
+      <section id="screen-scanning" class="screen scan-screen" aria-labelledby="scan-title">
+        <h2 id="scan-title" style="font-size: 0.95rem; color: var(--accent-lime); margin-bottom: 4px; font-weight: 700;">
+          식물 생육 상태 분석
+        </h2>
+
+        <div class="scan-view-box">
+          <img id="scan-img-preview" alt="스캔 대상 이미지">
+          <div class="scan-grid-overlay"></div>
+          <div class="scan-laser"></div>
+          
+          <div id="scan-bounding-box" class="scan-bounding-box">
+            <span id="scan-box-label" class="box-label">분석 진행 중...</span>
+          </div>
+        </div>
+
+        <div id="scan-status-text" class="scan-status-text">식물 분석 중...</div>
+        <div id="scan-log-text" class="scan-log-text">식물의 생육 상태와 남은 일수를 분석하고 있습니다.</div>
+
+        <div class="scan-progress-track">
+          <div id="scan-progress-bar" class="scan-progress-bar"></div>
+        </div>
+      </section>
+
+      <!-- ================= 4단계: 분석 결과 & D-Day 리포트 화면 ================= -->
+      <section id="screen-report" class="screen" aria-labelledby="report-title">
+        
+        <div class="report-header">
+          <div>
+            <div id="report-plant-badge" class="plant-analyzed-badge">
+              상추 · 1단계: 발아 및 떡잎기
+            </div>
+          </div>
+        </div>
+
+        <!-- 메인 D-Day 히어로 카드 -->
+        <div class="dday-hero-card">
+          <div class="dday-headline">완전 성장(수확)까지 남은 기간</div>
+          <div class="dday-countdown">
+            <div id="report-dday-num" class="dday-number">D-28</div>
+            <div class="dday-tag">남음</div>
+          </div>
+          
+          <div id="report-harvest-date" class="harvest-expected-date">
+            <span>📅 예상 완료일: <strong>2026년 10월 2일경</strong></span>
+          </div>
+
+          <!-- 생장 진행도 -->
+          <div class="growth-progress-wrap">
+            <div class="progress-info-row">
+              <span id="report-stage-name" style="color: var(--accent-lime);">1단계: 발아 및 떡잎기</span>
+              <span id="report-progress-pct">15% 달성</span>
+            </div>
+            <div class="progress-track">
+              <div id="report-progress-fill" class="progress-fill" style="width: 15%;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.72rem; color: #94a3b8;">
+              <span id="report-elapsed-days">잔여 28일 / 총 60일 주기</span>
+              <span>총 100% 성장</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 형태학적 생육 상태 진단 리포트 카드 -->
+        <div class="morph-diagnostic-card">
+          <div class="morph-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span>생육 상태 진단</span>
+          </div>
+          <div class="morph-grid">
+            <div class="morph-item">
+              <div class="morph-k">잎 및 줄기 상태</div>
+              <div id="morph-scale-tag" class="morph-v">분석 완료</div>
+            </div>
+            <div class="morph-item">
+              <div class="morph-k">생육 단계 특징</div>
+              <div id="morph-margin-tag" class="morph-v">형태 판별 완료</div>
+            </div>
+          </div>
+          <div class="morph-safety-alert">
+            <span class="safety-icon">🌱</span>
+            <span id="morph-safety-tag">생육 주기 기준 D-Day 산출 완료</span>
+          </div>
+        </div>
+
+        <!-- 맞춤 생육 조언 -->
+        <div class="ai-advice-box">
+          <div class="advice-header">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>맞춤 생육 케어 가이드</span>
+          </div>
+          <p id="report-ai-advice" class="advice-text">
+            하트 모양의 떡잎만 존재하는 새싹 시기입니다. 흙 표면이 마르지 않도록 부드럽게 분무해주세요.
+          </p>
+        </div>
+
+        <!-- 생육 환경 권장 가이드 (물 / 햇빛 / 온도) -->
+        <div class="section-title">
+          <span>🌿 필수 생육 환경 가이드</span>
+        </div>
+        <div class="care-guide-grid">
+          <div class="care-card">
+            <div class="care-icon">💧</div>
+            <div class="care-title">물주기</div>
+            <div id="report-care-water" class="care-val">1~2일에 1회</div>
+          </div>
+          <div class="care-card">
+            <div class="care-icon">☀️</div>
+            <div class="care-title">일조량</div>
+            <div id="report-care-sun" class="care-val">하루 4~5시간</div>
+          </div>
+          <div class="care-card">
+            <div class="care-icon">🌡️</div>
+            <div class="care-title">적정온도</div>
+            <div id="report-care-temp" class="care-val">15~20°C</div>
+          </div>
+        </div>
+
+        <!-- 전체 생장 타임라인 로드맵 (3단계) -->
+        <div class="section-title">
+          <span>🗺️ 3단계 생장 로드맵</span>
+        </div>
+        <div class="growth-roadmap">
+          <div id="report-roadmap-list">
+            <!-- 자바스크립트로 단계별 아이템 렌더링 -->
+          </div>
+        </div>
+
+        <!-- 하단 액션 버튼 그룹 -->
+        <div class="action-btn-row">
+          <button id="btn-rescan" class="btn-secondary" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+            다시 찍기
+          </button>
+
+          <button id="btn-save-diary" class="btn-primary" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            성장 일지에 저장
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- 성장 일지 모달/드로어 -->
+    <div id="history-drawer" class="history-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+      <div class="drawer-content">
+        <div class="drawer-header">
+          <h2 id="drawer-title" class="drawer-title">📖 나의 식물 성장 일지</h2>
+          <button id="btn-close-history" class="btn-icon" aria-label="닫기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div id="history-list" class="history-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="plants-data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // 샘플 아코디언 토글
+    const sampleToggle = document.getElementById('btn-sample-toggle');
+    const sampleContent = document.getElementById('sample-content');
+    if (sampleToggle && sampleContent) {
+      sampleToggle.addEventListener('click', () => {
+        const isOpen = sampleToggle.getAttribute('aria-expanded') === 'true';
+        sampleToggle.setAttribute('aria-expanded', String(!isOpen));
+        sampleContent.setAttribute('aria-hidden', String(isOpen));
+        sampleContent.classList.toggle('open', !isOpen);
+        sampleToggle.classList.toggle('active', !isOpen);
+      });
+    }
+  </script>
+</body>
+</html>
