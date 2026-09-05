@@ -640,3 +640,19 @@ function fetchWeatherByLocation() {
     }
   );
 }
+// PWA 당겨서 새로고침(Pull-to-refresh) 강제 차단
+let touchStartY = 0;
+
+document.addEventListener('touchstart', (e) => {
+  touchStartY = e.touches[0].clientY;
+}, { passive: false });
+
+document.addEventListener('touchmove', (e) => {
+  const touchY = e.touches[0].clientY;
+  const touchDiff = touchY - touchStartY;
+
+  // 화면 최상단에서 아래로 쓸어내릴 때 새로고침 동작 차단
+  if (window.scrollY === 0 && touchDiff > 0) {
+    if (e.cancelable) e.preventDefault();
+  }
+}, { passive: false });
