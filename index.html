@@ -418,6 +418,48 @@
       });
     }
   </script>
+  <!-- 앱 설치 유도 전체 화면 모달 -->
+  <div id="pwa-install-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:99999; color:white; text-align:center; padding:40px 20px; box-sizing:border-box; flex-direction:column; justify-content:center; align-items:center;">
+    <h2 style="font-size:24px; margin-bottom:10px;">📱 앱 설치 후 이용 가능합니다</h2>
+    <p style="margin-bottom:30px; color:#ccc; line-height:1.5;">식물 진단 서비스를 이용하려면<br>아래 버튼을 눌러 홈 화면에 앱을 설치해 주세요.</p>
+    <button id="btn-pwa-install"
+      style="background:#2e7d32; color:white; border:none; padding:16px 32px; font-size:18px; font-weight:bold; border-radius:12px; cursor:pointer; width:80%; max-width:300px;">
+      앱 설치하고 시작하기
+    </button>
+  </div>
+  <!-- PWA 강제 설치 모달 제어 스크립트 -->
+  <script>
+    let deferredPrompt;
+    const installModal = document.getElementById('pwa-install-modal');
+    const installBtn = document.getElementById('btn-pwa-install');
+
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+
+      if (!isStandalone) {
+        installModal.style.display = 'flex';
+      }
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          installModal.style.display = 'none';
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installModal.style.display = 'none';
+    });
+  </script>
 </body>
 
 </html>
