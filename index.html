@@ -31,6 +31,10 @@
         </div>
       </div>
       <div class="header-actions">
+        <!-- 테마 토글 버튼 -->
+        <button id="btn-theme-toggle" class="btn-icon" title="테마 변경" aria-label="라이트/다크 모드 전환">
+          <span id="theme-icon">🌙</span>
+        </button>
         <button id="btn-view-history" class="btn-icon" title="성장 일지" aria-label="성장 일지 열기">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -42,25 +46,22 @@
       </div>
     </header>
     <!-- 실시간 날씨 & 맞춤 식물 케어 카드 (디자인 개편) -->
-    <div id="weather-card"
-      style="margin: 16px; padding: 18px 20px; background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); border-radius: 16px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06); border: 1px solid #dcfce7;">
+    <div id="weather-card" class="weather-card">
       <!-- 상단: 위치 날씨 상태 및 온도 배지 -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span id="weather-status" style="font-weight: 700; font-size: 16px; color: #0f172a;">⛅ 위치 정보 확인 중...</span>
+      <div class="weather-card-top">
+        <div class="weather-status-wrap">
+          <span id="weather-status" class="weather-status-text">⛅ 위치 정보 확인 중...</span>
         </div>
-        <span id="weather-temp"
-          style="background: #15803d; color: #ffffff; padding: 4px 12px; border-radius: 20px; font-size: 15px; font-weight: 700; box-shadow: 0 2px 6px rgba(21, 128, 61, 0.2);">--°C</span>
+        <span id="weather-temp" class="weather-temp-badge">--°C</span>
       </div>
 
       <!-- 구분선 -->
-      <div style="height: 1px; background-color: #e2e8f0; margin: 10px 0;"></div>
+      <div class="weather-divider"></div>
 
       <!-- 하단: 가독성을 높인 식물 케어 팁 -->
-      <div style="display: flex; align-items: flex-start; gap: 8px; margin-top: 10px;">
-        <span style="font-size: 16px; line-height: 1.4;">💡</span>
-        <p id="plant-tip"
-          style="margin: 0; font-size: 14px; color: #334155; font-weight: 500; line-height: 1.5; word-break: keep-all;">
+      <div class="weather-tip-row">
+        <span class="weather-tip-icon">💡</span>
+        <p id="plant-tip" class="weather-tip-text">
           현재 위치의 날씨를 확인하여 맞춤형 식물 관리 팁을 준비 중입니다.
         </p>
       </div>

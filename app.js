@@ -84,6 +84,44 @@ document.addEventListener('DOMContentLoaded', () => {
   const morphSafetyTag = document.getElementById('morph-safety-tag');
 
   /* ────────────────────────────────────────────────────────
+   * 2-1. 테마 관리 (다크 / 라이트 모드 전환 & localStorage)
+   * ──────────────────────────────────────────────────────── */
+  const btnThemeToggle = document.getElementById('btn-theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+
+  function applyTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+    if (themeIcon) {
+      themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+    }
+    if (btnThemeToggle) {
+      btnThemeToggle.setAttribute('title', theme === 'light' ? '다크 모드로 전환' : '라이트 모드로 전환');
+      btnThemeToggle.setAttribute('aria-label', theme === 'light' ? '다크 모드로 전환' : '라이트 모드로 전환');
+    }
+    try {
+      localStorage.setItem('plant_theme', theme);
+    } catch (e) {
+      console.warn('localStorage 저장 실패:', e);
+    }
+  }
+
+  // 저장된 테마 불러오기 (기본: 다크 모드)
+  try {
+    const savedTheme = localStorage.getItem('plant_theme') || 'dark';
+    applyTheme(savedTheme);
+  } catch (e) {
+    applyTheme('dark');
+  }
+
+  if (btnThemeToggle) {
+    btnThemeToggle.addEventListener('click', () => {
+      const currentTheme = document.body.getAttribute('data-theme') || 'dark';
+      const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+      applyTheme(nextTheme);
+    });
+  }
+
+  /* ────────────────────────────────────────────────────────
    * 3. [앨범 업로드] 파일 인풋 엘리먼트 보장 및 바인딩
    * ──────────────────────────────────────────────────────── */
   let plantFileInput = document.getElementById('plantFileInput') ||
