@@ -41,15 +41,29 @@
         </button>
       </div>
     </header>
-    <!-- 날씨 및 식물 관리 팁 카드 -->
-    <div class="card" id="weather-card" style="margin: 16px; padding: 16px; background: #e8f5e9; border-radius: 12px;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span id="weather-status" style="font-weight: bold; font-size: 16px;">⛅ 위치 정보를 불러오는 중...</span>
-        <span id="weather-temp" style="font-size: 18px; font-weight: bold; color: #2e7d32;">--°C</span>
+    <!-- 실시간 날씨 & 맞춤 식물 케어 카드 (디자인 개편) -->
+    <div id="weather-card"
+      style="margin: 16px; padding: 18px 20px; background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); border-radius: 16px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06); border: 1px solid #dcfce7;">
+      <!-- 상단: 위치 날씨 상태 및 온도 배지 -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span id="weather-status" style="font-weight: 700; font-size: 16px; color: #0f172a;">⛅ 위치 정보 확인 중...</span>
+        </div>
+        <span id="weather-temp"
+          style="background: #15803d; color: #ffffff; padding: 4px 12px; border-radius: 20px; font-size: 15px; font-weight: 700; box-shadow: 0 2px 6px rgba(21, 128, 61, 0.2);">--°C</span>
       </div>
-      <p id="plant-tip" style="margin-top: 8px; font-size: 14px; color: #555; margin-bottom: 0;">
-        현재 날씨에 맞는 식물 관리 팁을 계산하고 있습니다.
-      </p>
+
+      <!-- 구분선 -->
+      <div style="height: 1px; background-color: #e2e8f0; margin: 10px 0;"></div>
+
+      <!-- 하단: 가독성을 높인 식물 케어 팁 -->
+      <div style="display: flex; align-items: flex-start; gap: 8px; margin-top: 10px;">
+        <span style="font-size: 16px; line-height: 1.4;">💡</span>
+        <p id="plant-tip"
+          style="margin: 0; font-size: 14px; color: #334155; font-weight: 500; line-height: 1.5; word-break: keep-all;">
+          현재 위치의 날씨를 확인하여 맞춤형 식물 관리 팁을 준비 중입니다.
+        </p>
+      </div>
     </div>
 
     <!-- 스크롤 가능한 메인 화면 영역 -->
