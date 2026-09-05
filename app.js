@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * 0. 상수 및 설정
    * ──────────────────────────────────────────────────────── */
   const GEMINI_API_KEY = 'AQ.Ab8RN6K0JuqxqiGe7alYp7TDhmnRHtiX3YJqVHfnWXimILgINQ';
-  const GEMINI_MODELS  = [
+  const GEMINI_MODELS = [
     'gemini-3.5-flash',
     'gemini-3.7-flash',
     'gemini-flash-latest'
@@ -20,81 +20,81 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ────────────────────────────────────────────────────────
    * 1. 앱 상태 변수
    * ──────────────────────────────────────────────────────── */
-  let currentPlant     = PLANTS_DATA.bean;
-  let currentStream    = null;
+  let currentPlant = PLANTS_DATA.bean;
+  let currentStream = null;
   let capturedImageSrc = null;
-  let currentAnalysis  = null;
+  let currentAnalysis = null;
 
   /* ────────────────────────────────────────────────────────
    * 2. DOM 엘리먼트 참조
    * ──────────────────────────────────────────────────────── */
   const screens = {
-    select:   document.getElementById('screen-select'),
-    camera:   document.getElementById('screen-camera'),
+    select: document.getElementById('screen-select'),
+    camera: document.getElementById('screen-camera'),
     scanning: document.getElementById('screen-scanning'),
-    report:   document.getElementById('screen-report'),
+    report: document.getElementById('screen-report'),
   };
 
-  const choiceCards        = document.querySelectorAll('.plant-choice-card');
-  const previewPlantName   = document.getElementById('preview-plant-name');
-  const previewTotalDays   = document.getElementById('preview-total-days');
+  const choiceCards = document.querySelectorAll('.plant-choice-card');
+  const previewPlantName = document.getElementById('preview-plant-name');
+  const previewTotalDays = document.getElementById('preview-total-days');
   const previewOptimalTemp = document.getElementById('preview-optimal-temp');
-  const previewSunlight    = document.getElementById('preview-sunlight');
-  const previewWatering    = document.getElementById('preview-watering');
+  const previewSunlight = document.getElementById('preview-sunlight');
+  const previewWatering = document.getElementById('preview-watering');
   const previewStagesCount = document.getElementById('preview-stages-count');
-  const sampleScroll       = document.getElementById('sample-scroll');
+  const sampleScroll = document.getElementById('sample-scroll');
 
-  const btnGoToCamera   = document.getElementById('btn-go-to-camera');
+  const btnGoToCamera = document.getElementById('btn-go-to-camera');
   const btnBackToSelect = document.getElementById('btn-back-to-select');
-  const btnRescan       = document.getElementById('btn-rescan');
-  const btnSwitchCam    = document.getElementById('btn-switch-cam');
-  const btnSaveDiary    = document.getElementById('btn-save-diary');
-  const btnViewHistory  = document.getElementById('btn-view-history');
+  const btnRescan = document.getElementById('btn-rescan');
+  const btnSwitchCam = document.getElementById('btn-switch-cam');
+  const btnSaveDiary = document.getElementById('btn-save-diary');
+  const btnViewHistory = document.getElementById('btn-view-history');
   const btnCloseHistory = document.getElementById('btn-close-history');
-  const historyDrawer   = document.getElementById('history-drawer');
-  const historyList     = document.getElementById('history-list');
+  const historyDrawer = document.getElementById('history-drawer');
+  const historyList = document.getElementById('history-list');
 
-  const videoElem       = document.getElementById('camera-video');
-  const previewImg      = document.getElementById('preview-img');
-  const canvasElem      = document.getElementById('analysis-canvas');
-  const btnShutter      = document.getElementById('btn-shutter');
+  const videoElem = document.getElementById('camera-video');
+  const previewImg = document.getElementById('preview-img');
+  const canvasElem = document.getElementById('analysis-canvas');
+  const btnShutter = document.getElementById('btn-shutter');
 
-  const scanImgPreview  = document.getElementById('scan-img-preview');
-  const scanStatusText  = document.getElementById('scan-status-text');
-  const scanLogText     = document.getElementById('scan-log-text');
+  const scanImgPreview = document.getElementById('scan-img-preview');
+  const scanStatusText = document.getElementById('scan-status-text');
+  const scanLogText = document.getElementById('scan-log-text');
   const scanProgressBar = document.getElementById('scan-progress-bar');
   const scanBoundingBox = document.getElementById('scan-bounding-box');
-  const scanBoxLabel    = document.getElementById('scan-box-label');
+  const scanBoxLabel = document.getElementById('scan-box-label');
 
-  const reportDdayNum     = document.getElementById('report-dday-num');
+  const reportDdayNum = document.getElementById('report-dday-num');
   const reportHarvestDate = document.getElementById('report-harvest-date');
-  const reportPlantBadge  = document.getElementById('report-plant-badge');
-  const reportConfidence  = document.getElementById('report-confidence');
-  const reportStageName   = document.getElementById('report-stage-name');
+  const reportPlantBadge = document.getElementById('report-plant-badge');
+  const reportConfidence = document.getElementById('report-confidence');
+  const reportStageName = document.getElementById('report-stage-name');
   const reportProgressPct = document.getElementById('report-progress-pct');
-  const reportProgressFill= document.getElementById('report-progress-fill');
+  const reportProgressFill = document.getElementById('report-progress-fill');
   const reportElapsedDays = document.getElementById('report-elapsed-days');
-  const reportCareWater   = document.getElementById('report-care-water');
-  const reportCareSun     = document.getElementById('report-care-sun');
-  const reportCareTemp    = document.getElementById('report-care-temp');
-  const reportAiAdvice    = document.getElementById('report-ai-advice');
+  const reportCareWater = document.getElementById('report-care-water');
+  const reportCareSun = document.getElementById('report-care-sun');
+  const reportCareTemp = document.getElementById('report-care-temp');
+  const reportAiAdvice = document.getElementById('report-ai-advice');
   const reportRoadmapList = document.getElementById('report-roadmap-list');
-  const morphScaleTag     = document.getElementById('morph-scale-tag');
-  const morphMarginTag    = document.getElementById('morph-margin-tag');
-  const morphSafetyTag    = document.getElementById('morph-safety-tag');
+  const morphScaleTag = document.getElementById('morph-scale-tag');
+  const morphMarginTag = document.getElementById('morph-margin-tag');
+  const morphSafetyTag = document.getElementById('morph-safety-tag');
 
   /* ────────────────────────────────────────────────────────
    * 3. [앨범 업로드] 파일 인풋 엘리먼트 보장 및 바인딩
    * ──────────────────────────────────────────────────────── */
   let plantFileInput = document.getElementById('plantFileInput') ||
-                       document.getElementById('imageInput') ||
-                       document.getElementById('plant-file-input');
+    document.getElementById('imageInput') ||
+    document.getElementById('plant-file-input');
 
   if (!plantFileInput) {
     plantFileInput = document.createElement('input');
-    plantFileInput.type    = 'file';
-    plantFileInput.id      = 'plantFileInput';
-    plantFileInput.accept  = 'image/*';
+    plantFileInput.type = 'file';
+    plantFileInput.id = 'plantFileInput';
+    plantFileInput.accept = 'image/*';
     plantFileInput.style.display = 'none';
     document.body.appendChild(plantFileInput);
   } else {
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     reader.onload = (evt) => {
       const dataUrl = evt.target.result;
-      try { plantFileInput.value = ''; } catch (_) {}
+      try { plantFileInput.value = ''; } catch (_) { }
       analyzeImage(dataUrl);
     };
 
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnShutter.addEventListener('click', () => {
       if (videoElem && videoElem.srcObject && videoElem.style.display !== 'none') {
         if (!canvasElem) return;
-        canvasElem.width  = videoElem.videoWidth  || 640;
+        canvasElem.width = videoElem.videoWidth || 640;
         canvasElem.height = videoElem.videoHeight || 480;
         canvasElem.getContext('2d').drawImage(videoElem, 0, 0, canvasElem.width, canvasElem.height);
         analyzeImage(canvasElem.toDataURL('image/jpeg', 0.88));
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
       img.crossOrigin = 'Anonymous';
       img.onload = () => {
         const c = document.createElement('canvas');
-        c.width  = img.naturalWidth  || 400;
+        c.width = img.naturalWidth || 400;
         c.height = img.naturalHeight || 400;
         const ctx = c.getContext('2d');
         ctx.fillStyle = '#0a1a11';
@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function callGeminiVisionApi(imageSrc) {
     const rasterDataUrl = await ensureRasterBase64(imageSrc);
     const base64Data = rasterDataUrl.split('base64,')[1];
-    const mimeType   = (rasterDataUrl.split(';')[0].split(':')[1]) || 'image/jpeg';
+    const mimeType = (rasterDataUrl.split(';')[0].split(':')[1]) || 'image/jpeg';
 
     // 식물학적 기준 및 안전장치가 반영된 시스템 지침
     const systemInstruction = `너는 식물 성장 분석 및 D-Day 예측 전문 AI 모델이야.
@@ -348,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
     switchScreen('scanning');
 
     if (scanStatusText) scanStatusText.textContent = '식물 분석 중...';
-    if (scanLogText)    scanLogText.textContent    = '식물의 생육 상태와 잔여 일수를 분석하고 있습니다.';
+    if (scanLogText) scanLogText.textContent = '식물의 생육 상태와 잔여 일수를 분석하고 있습니다.';
 
     let progress = 10;
     if (scanProgressBar) scanProgressBar.style.width = '10%';
@@ -373,15 +373,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       clearInterval(progressTimer);
       if (scanProgressBar) scanProgressBar.style.width = '100%';
-      if (scanStatusText)  scanStatusText.textContent  = '분석 완료!';
-      if (scanLogText)     scanLogText.textContent     = '분석이 완료되었습니다. 결과 화면으로 이동합니다.';
+      if (scanStatusText) scanStatusText.textContent = '분석 완료!';
+      if (scanLogText) scanLogText.textContent = '분석이 완료되었습니다. 결과 화면으로 이동합니다.';
 
       setTimeout(() => applyVisionApiResponse(apiResult, imageSrc), 300);
 
     } catch (err) {
       clearInterval(progressTimer);
       if (scanStatusText) scanStatusText.textContent = '분석 오류';
-      if (scanLogText)    scanLogText.textContent    = err.message || 'API 호출 중 문제가 발생했습니다.';
+      if (scanLogText) scanLogText.textContent = err.message || 'API 호출 중 문제가 발생했습니다.';
       console.error('API Error:', err);
 
       setTimeout(() => {
@@ -396,9 +396,9 @@ document.addEventListener('DOMContentLoaded', () => {
    * 9. 분석 결과 화면 렌더링
    * ──────────────────────────────────────────────────────── */
   function applyVisionApiResponse(apiResult, imgSrc) {
-    const stageNum   = Math.min(Math.max(Number(apiResult.stage) || 1, 1), 3);
-    const stageObj   = currentPlant.stages[stageNum - 1] || currentPlant.stages[0];
-    const daysLeft   = Math.max(0, Math.round(Number(apiResult.days_left)));
+    const stageNum = Math.min(Math.max(Number(apiResult.stage) || 1, 1), 3);
+    const stageObj = currentPlant.stages[stageNum - 1] || currentPlant.stages[0];
+    const daysLeft = Math.max(0, Math.round(Number(apiResult.days_left)));
     const reasonText = apiResult.reason || stageObj.description;
 
     const now = new Date();
@@ -409,23 +409,23 @@ document.addEventListener('DOMContentLoaded', () => {
       Math.round(((currentPlant.totalGrowthDays - daysLeft) / currentPlant.totalGrowthDays) * 100)
     ));
 
-    if (reportDdayNum)     reportDdayNum.textContent = daysLeft <= 0 ? 'D-Day (수확 적기!)' : `D-${daysLeft}`;
+    if (reportDdayNum) reportDdayNum.textContent = daysLeft <= 0 ? 'D-Day (수확 적기!)' : `D-${daysLeft}`;
     if (reportHarvestDate) reportHarvestDate.innerHTML = daysLeft <= 0
       ? '<span>✨ 지금 바로 수확하여 드실 수 있습니다!</span>'
       : `<span>📅 예상 완료일: <strong>${formattedHarvestDate}경</strong></span>`;
 
-    if (reportPlantBadge)  reportPlantBadge.textContent  = `${currentPlant.name} · ${stageObj.name}`;
-    if (reportStageName)   reportStageName.textContent   = stageObj.name;
+    if (reportPlantBadge) reportPlantBadge.textContent = `${currentPlant.name} · ${stageObj.name}`;
+    if (reportStageName) reportStageName.textContent = stageObj.name;
     if (reportProgressPct) reportProgressPct.textContent = `${progressPercent}% 달성`;
-    if (reportProgressFill)reportProgressFill.style.width= `${progressPercent}%`;
+    if (reportProgressFill) reportProgressFill.style.width = `${progressPercent}%`;
     if (reportElapsedDays) reportElapsedDays.textContent = `잔여 ${daysLeft}일 / 총 ${currentPlant.totalGrowthDays}일 주기`;
-    if (reportCareWater)   reportCareWater.textContent   = currentPlant.environment.wateringCycle;
-    if (reportCareSun)     reportCareSun.textContent     = currentPlant.environment.sunlight;
-    if (reportCareTemp)    reportCareTemp.textContent    = currentPlant.environment.optimalTemp;
-    if (reportAiAdvice)    reportAiAdvice.textContent    = reasonText;
-    if (morphScaleTag)     morphScaleTag.textContent     = `${stageObj.name} 확인`;
-    if (morphMarginTag)    morphMarginTag.textContent    = stageObj.shortName;
-    if (morphSafetyTag)    morphSafetyTag.textContent    = `예상 수확일까지 약 ${daysLeft}일 남음`;
+    if (reportCareWater) reportCareWater.textContent = currentPlant.environment.wateringCycle;
+    if (reportCareSun) reportCareSun.textContent = currentPlant.environment.sunlight;
+    if (reportCareTemp) reportCareTemp.textContent = currentPlant.environment.optimalTemp;
+    if (reportAiAdvice) reportAiAdvice.textContent = reasonText;
+    if (morphScaleTag) morphScaleTag.textContent = `${stageObj.name} 확인`;
+    if (morphMarginTag) morphMarginTag.textContent = stageObj.shortName;
+    if (morphSafetyTag) morphSafetyTag.textContent = `예상 수확일까지 약 ${daysLeft}일 남음`;
 
     renderRoadmap(stageNum - 1);
 
@@ -474,11 +474,11 @@ document.addEventListener('DOMContentLoaded', () => {
     choiceCards.forEach(card => {
       card.classList.toggle('selected', card.dataset.plant === plantId);
     });
-    if (previewPlantName)   previewPlantName.textContent   = `${currentPlant.emoji} ${currentPlant.name}`;
-    if (previewTotalDays)   previewTotalDays.textContent   = `약 ${currentPlant.totalGrowthDays}일`;
+    if (previewPlantName) previewPlantName.textContent = `${currentPlant.emoji} ${currentPlant.name}`;
+    if (previewTotalDays) previewTotalDays.textContent = `약 ${currentPlant.totalGrowthDays}일`;
     if (previewOptimalTemp) previewOptimalTemp.textContent = currentPlant.environment.optimalTemp;
-    if (previewSunlight)    previewSunlight.textContent    = currentPlant.environment.sunlight;
-    if (previewWatering)    previewWatering.textContent    = currentPlant.environment.wateringCycle;
+    if (previewSunlight) previewSunlight.textContent = currentPlant.environment.sunlight;
+    if (previewWatering) previewWatering.textContent = currentPlant.environment.wateringCycle;
     if (previewStagesCount) previewStagesCount.textContent = `${currentPlant.stages.length}단계 생육 모델`;
     renderSamplePresets();
   }
@@ -503,9 +503,9 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ────────────────────────────────────────────────────────
    * 11. 내비게이션 버튼
    * ──────────────────────────────────────────────────────── */
-  if (btnGoToCamera)   btnGoToCamera.addEventListener('click',   () => { switchScreen('camera'); startCamera(); });
+  if (btnGoToCamera) btnGoToCamera.addEventListener('click', () => { switchScreen('camera'); startCamera(); });
   if (btnBackToSelect) btnBackToSelect.addEventListener('click', () => switchScreen('select'));
-  if (btnRescan)       btnRescan.addEventListener('click',       () => { switchScreen('camera'); startCamera(); });
+  if (btnRescan) btnRescan.addEventListener('click', () => { switchScreen('camera'); startCamera(); });
 
   /* ────────────────────────────────────────────────────────
    * 12. 성장 일지 (LocalStorage)
@@ -565,13 +565,78 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (btnViewHistory)  btnViewHistory.addEventListener('click',  () => { renderHistoryDrawer(); if (historyDrawer) historyDrawer.classList.add('open'); });
+  if (btnViewHistory) btnViewHistory.addEventListener('click', () => { renderHistoryDrawer(); if (historyDrawer) historyDrawer.classList.add('open'); });
   if (btnCloseHistory) btnCloseHistory.addEventListener('click', () => { if (historyDrawer) historyDrawer.classList.remove('open'); });
-  if (historyDrawer)   historyDrawer.addEventListener('click',   e => { if (e.target === historyDrawer) historyDrawer.classList.remove('open'); });
+  if (historyDrawer) historyDrawer.addEventListener('click', e => { if (e.target === historyDrawer) historyDrawer.classList.remove('open'); });
 
   /* ────────────────────────────────────────────────────────
    * 13. 초기화
    * ──────────────────────────────────────────────────────── */
   selectPlant('bean');
-
+  fetchWeatherByLocation(); // ★ 앱 시작 시 날씨 정보 함께 로드
 }); // DOMContentLoaded
+
+
+// ★ 위치 기반 날씨 및 식물 관리 팁 조회 함수
+function fetchWeatherByLocation() {
+  const statusEl = document.getElementById('weather-status');
+  const tempEl = document.getElementById('weather-temp');
+  const tipEl = document.getElementById('plant-tip');
+
+  if (!statusEl || !tempEl || !tipEl) return;
+
+  if (!navigator.geolocation) {
+    statusEl.innerText = '⚠️ 위치 정보 미지원 브라우저';
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      try {
+        const response = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+        );
+        const data = await response.json();
+        const weather = data.current_weather;
+
+        const temp = weather.temperature;
+        const code = weather.weathercode;
+
+        tempEl.innerText = `${temp}°C`;
+
+        let statusText = '☀️ 맑음';
+        let tipText = '햇빛이 좋은 날입니다. 겉흙이 말랐다면 물을 주세요.';
+
+        if ([1, 2, 3].includes(code)) {
+          statusText = '⛅ 구름 조금';
+          tipText = '통풍이 잘 되는 창가에 식물을 두면 좋습니다.';
+        } else if ([51, 53, 55, 61, 63, 65, 80, 81].includes(code)) {
+          statusText = '🌧️ 비 옴';
+          tipText = '습도가 높으니 과습에 주의하고 과도한 물주기를 피하세요.';
+        } else if ([71, 73, 75, 85].includes(code)) {
+          statusText = '❄️ 눈 옴';
+          tipText = '냉해를 입지 않도록 식물을 실내 따뜻한 곳으로 이동하세요.';
+        }
+
+        if (temp >= 30) {
+          tipText += ' ⚠️ 폭염 주의! 직사광선을 피하고 분무해 주세요.';
+        } else if (temp <= 5) {
+          tipText += ' ❄️ 저온 주의! 냉해 위험이 있으니 베란다에서 실내로 들여놓으세요.';
+        }
+
+        statusEl.innerText = statusText;
+        tipEl.innerText = tipText;
+
+      } catch (error) {
+        statusEl.innerText = '❌ 날씨 정보를 가져오지 못했습니다.';
+      }
+    },
+    (error) => {
+      statusEl.innerText = '📍 위치 권한이 거부되었습니다.';
+      tipEl.innerText = '위치 권한을 허용하시면 실시간 날씨 맞춤 관리 팁을 받아보실 수 있습니다.';
+    }
+  );
+}
