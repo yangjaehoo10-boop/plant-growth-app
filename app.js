@@ -694,3 +694,7 @@ document.addEventListener('touchmove', (e) => {
     if (e.cancelable) e.preventDefault();
   }
 }, { passive: false });
+// 꾹 누르기 및 우클릭 컨텍스트 메뉴 차단
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+});

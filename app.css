@@ -1721,3 +1721,20 @@ body[data-theme="light"] .morph-safety-alert {
 .morph-safety-alert .safety-icon {
   font-size: 14px;
 }
+
+/* 텍스트 드래그 및 꾹 누르기 팝업 메뉴 전체 차단 */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  /* iOS Safari 롱프레스 메뉴 차단 */
+}
+
+/* 텍스트 입력창은 정상 작동하도록 예외 처리 */
+input,
+textarea {
+  -webkit-user-select: auto;
+  user-select: auto;
+}
