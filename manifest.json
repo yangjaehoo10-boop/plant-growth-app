@@ -1,6 +1,6 @@
 {
-    "name": "식물 진단 앱",
-    "short_name": "식물진단",
+    "name": "AFK 식물키우기",
+    "short_name": "바이러스 아님(진짜로)",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
