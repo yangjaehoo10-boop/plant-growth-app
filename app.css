@@ -228,7 +228,7 @@ body[data-theme="dark"] .mobile-app-container {
    상단 고정 헤더 (Liquid Frosted Glass)
    ============================================================ */
 .app-header {
-  padding: 16px 20px 12px;
+  padding: 10px 20px 9px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -350,12 +350,12 @@ body[data-theme="dark"] .btn-icon:hover {
    실시간 날씨 & 위치 카드 (Liquid Glass Spec)
    ============================================================ */
 .weather-card {
-  margin: 6px 18px 10px;
-  padding: 14px 18px;
+  margin: 4px 18px 8px;
+  padding: 10px 16px;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 255, 255, 0.52) 100%);
   backdrop-filter: blur(24px) saturate(190%);
   -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border-radius: 22px;
+  border-radius: 20px;
   border: 1.5px solid rgba(255, 255, 255, 0.9);
   box-shadow:
     0 12px 30px -4px rgba(99, 102, 241, 0.08),
@@ -412,7 +412,7 @@ body[data-theme="dark"] .weather-card {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .weather-tip-icon {
@@ -466,7 +466,7 @@ body[data-theme="dark"] .weather-card {
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  padding: 4px 18px 14px;
+  padding: 2px 16px 8px;
 }
 
 @keyframes fadeInSlide {
@@ -485,15 +485,15 @@ body[data-theme="dark"] .weather-card {
    ============================================================ */
 .hero-banner {
   text-align: center;
-  padding: 12px 0 16px;
+  padding: 6px 0 8px;
   flex-shrink: 0;
 }
 
 .hero-title {
-  font-size: 1.55rem;
+  font-size: 1.3rem;
   font-weight: 800;
-  line-height: 1.25;
-  margin-bottom: 6px;
+  line-height: 1.2;
+  margin-bottom: 4px;
   letter-spacing: -0.02em;
   color: #0f172a;
 }
@@ -510,9 +510,9 @@ body[data-theme="dark"] .hero-title {
 }
 
 .hero-desc {
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   color: #64748b;
-  line-height: 1.45;
+  line-height: 1.35;
 }
 
 body[data-theme="dark"] .hero-desc {
@@ -523,8 +523,8 @@ body[data-theme="dark"] .hero-desc {
 .plant-cards-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin: 4px 0 16px;
+  gap: 10px;
+  margin: 4px 0 10px;
   flex-shrink: 0;
 }
 
@@ -534,8 +534,8 @@ body[data-theme="dark"] .hero-desc {
   backdrop-filter: blur(24px) saturate(190%);
   -webkit-backdrop-filter: blur(24px) saturate(190%);
   border: 1.5px solid rgba(255, 255, 255, 0.9);
-  border-radius: 26px;
-  padding: 24px 10px 20px;
+  border-radius: 22px;
+  padding: 14px 10px 12px;
   cursor: pointer;
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
@@ -602,15 +602,15 @@ body[data-theme="dark"] .plant-choice-card.selected {
 }
 
 .card-avatar {
-  width: 64px;
-  height: 64px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: rgba(241, 245, 249, 0.8);
   border: 2px solid transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   transition: all 0.25s ease;
   color: #64748b;
 }
@@ -636,9 +636,9 @@ body[data-theme="dark"] .plant-choice-card.selected .card-avatar {
 }
 
 .plant-name {
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 700;
-  margin-top: 10px;
+  margin-top: 4px;
   margin-bottom: 2px;
   color: #0f172a;
 }
@@ -679,9 +679,9 @@ body[data-theme="dark"] .plant-cycle-tag {
   backdrop-filter: blur(24px) saturate(190%);
   -webkit-backdrop-filter: blur(24px) saturate(190%);
   border: 1.5px solid rgba(255, 255, 255, 0.9);
-  border-radius: 26px;
-  padding: 18px 20px;
-  margin-bottom: 16px;
+  border-radius: 22px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
   box-shadow:
     0 14px 34px -4px rgba(99, 102, 241, 0.08),
     inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
@@ -700,7 +700,7 @@ body[data-theme="dark"] .plant-detail-preview {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 
 .guide-header-left {
@@ -740,7 +740,7 @@ body[data-theme="dark"] .guide-plant-chip {
 .preview-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 7px;
 }
 
 .preview-item {
@@ -748,12 +748,12 @@ body[data-theme="dark"] .guide-plant-chip {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1.2px solid rgba(255, 255, 255, 0.9);
-  border-radius: 18px;
-  padding: 12px 14px;
+  border-radius: 14px;
+  padding: 8px 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 74px;
+  min-height: 58px;
   box-shadow:
     inset 0 1px 1.5px rgba(255, 255, 255, 0.95),
     0 4px 12px rgba(0, 0, 0, 0.02);
@@ -797,7 +797,7 @@ body[data-theme="dark"] .preview-val {
 .sticky-cta {
   position: relative;
   margin-top: auto;
-  padding: 8px 0 12px;
+  padding: 6px 0 10px;
   background: transparent;
   z-index: 10;
   flex-shrink: 0;
@@ -805,7 +805,7 @@ body[data-theme="dark"] .preview-val {
 
 .btn-primary {
   width: 100%;
-  height: 56px;
+  height: 50px;
   border-radius: 9999px;
   background: linear-gradient(
     135deg,
@@ -815,13 +815,13 @@ body[data-theme="dark"] .preview-val {
   );
   color: #ffffff;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   box-shadow: 0 8px 25px -4px rgba(139, 92, 246, 0.45);
   transition: all 0.25s ease;
   -webkit-tap-highlight-color: transparent;
@@ -1108,26 +1108,33 @@ body[data-theme="dark"] #btn-switch-cam {
   height: 2px;
 }
 
-/* 하단 중앙 안내 캡슐 */
+/* 하단 중앙 안내 캡슐 (크기 최적화 및 텍스트 줄바꿈 방지) */
 .hud-bottom-hint {
   position: absolute;
-  bottom: 18px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
-  max-width: 90%;
+  max-width: calc(100% - 24px);
   z-index: 5;
+  pointer-events: none;
 }
 
 .hud-hint-text {
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
-  padding: 7px 18px;
+  padding: 6px 14px;
   color: #ffffff;
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   font-weight: 500;
   text-align: center;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* 카메라 컨트롤 영역 */
