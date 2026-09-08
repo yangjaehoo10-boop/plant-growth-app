@@ -28,9 +28,6 @@ function generatePlantSVG(type, stageIndex) {
         <!-- 매끈한 전연의 둥근 자엽(떡잎) 2장 - 엽맥 단순함 -->
         <path d="M155,128 C135,124 122,108 135,96 C147,88 158,112 155,128 Z" fill="#86efac"/>
         <path d="M155,128 C175,124 188,108 175,96 C163,88 152,112 155,128 Z" fill="#4ade80"/>
-        <!-- 스케일 표기 뱃지 -->
-        <rect x="12" y="12" width="115" height="24" rx="6" fill="rgba(0,0,0,0.6)" stroke="#86efac" stroke-width="1"/>
-        <text x="70" y="28" fill="#86efac" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">1단계: 떡잎기 (새싹)</text>
       </svg>`,
 
       // 2단계: 본잎 성장기 (떡잎 사이로 3출엽 본잎 출현, 잎맥과 톱니/하트 윤곽 뚜렷해짐)
@@ -54,8 +51,6 @@ function generatePlantSVG(type, stageIndex) {
         <line x1="220" y1="105" x2="206" y2="80" stroke="#86efac" stroke-width="2"/>
         <!-- 중앙 꼭대기 3번째 새 본잎 -->
         <path d="M160,105 C140,65 180,65 160,105 Z" fill="#4ade80"/>
-        <rect x="12" y="12" width="125" height="24" rx="6" fill="rgba(0,0,0,0.6)" stroke="#4ade80" stroke-width="1"/>
-        <text x="75" y="28" fill="#4ade80" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">2단계: 본잎 성장기</text>
       </svg>`,
 
       // 3단계: 성숙기 / 수확 직전 (화분 가득 번성한 잎 군집, 굵은 원줄기와 꼬투리 맺힘)
@@ -81,8 +76,6 @@ function generatePlantSVG(type, stageIndex) {
           <circle cx="106" cy="190" r="5.5" fill="#bef264" stroke="none"/>
           <circle cx="96" cy="215" r="5.5" fill="#bef264" stroke="none"/>
         </g>
-        <rect x="12" y="12" width="135" height="24" rx="6" fill="rgba(0,0,0,0.6)" stroke="#facc15" stroke-width="1"/>
-        <text x="80" y="28" fill="#facc15" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">3단계: 성숙 및 수확기</text>
       </svg>`
     ];
     return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(beanVisuals[stageIndex] || beanVisuals[0]);
@@ -106,8 +99,6 @@ function generatePlantSVG(type, stageIndex) {
         <!-- 미세한 단일 중심선 -->
         <line x1="160" y1="195" x2="130" y2="188" stroke="#dcfce7" stroke-width="1.2"/>
         <line x1="160" y1="195" x2="190" y2="188" stroke="#dcfce7" stroke-width="1.2"/>
-        <rect x="12" y="12" width="125" height="24" rx="6" fill="rgba(0,0,0,0.6)" stroke="#86efac" stroke-width="1"/>
-        <text x="75" y="28" fill="#86efac" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">1단계: 떡잎기 (새싹)</text>
       </svg>`,
 
       // 2단계: 본잎 성장기 (떡잎 사이로 가장자리가 오톨도톨한 톱니/물결무늬 본잎 출현)
@@ -128,8 +119,6 @@ function generatePlantSVG(type, stageIndex) {
         </g>
         <!-- 뚜렷한 흰색 잎맥 네트워크 -->
         <path d="M160,225 Q152,165 148,122" stroke="#f0fdf4" stroke-width="2.5" fill="none" opacity="0.7"/>
-        <rect x="12" y="12" width="125" height="24" rx="6" fill="rgba(0,0,0,0.6)" stroke="#4ade80" stroke-width="1"/>
-        <text x="75" y="28" fill="#4ade80" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">2단계: 본잎 성장기</text>
       </svg>`,
 
       // 3단계: 성숙기 / 수확 적기 (화분을 덮는 풍성한 로제트 결구, 겹겹이 중첩된 성체 쌈채소)
@@ -150,8 +139,6 @@ function generatePlantSVG(type, stageIndex) {
           <ellipse cx="185" cy="125" rx="42" ry="46" fill="#4ade80" transform="rotate(8 185 125)"/>
           <ellipse cx="160" cy="98" rx="36" ry="38" fill="#86efac"/>
         </g>
-        <rect x="12" y="12" width="135" height="24" rx="6" fill="rgba(0,0,0,0.6)" stroke="#facc15" stroke-width="1"/>
-        <text x="80" y="28" fill="#facc15" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">3단계: 성숙 및 수확기</text>
       </svg>`
     ];
     return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(lettuceVisuals[stageIndex] || lettuceVisuals[0]);
@@ -175,7 +162,7 @@ const PLANTS_DATA = {
     environment: {
       optimalTemp: "20°C ~ 25°C",
       sunlight: "하루 6시간 이상 직사광선",
-      wateringCycle: "겉흙이 마르면 듬뿍 (2~3일에 1회)",
+      wateringCycle: "겉흙이 마르면 듬뿍\n(2~3일에 1회)",
       soilType: "배수가 우수한 배양토 / 부엽토"
     },
     // D-Day 절대 안전장치 (Safety Clamps)
@@ -263,9 +250,9 @@ const PLANTS_DATA = {
     totalGrowthDays: 40, // 표준 총 생장 주기 (일)
     harvestDescription: "손바닥 크기의 쌈 채소 잎이 겹겹이 풍성해지면 바깥 잎부터 수확합니다.",
     environment: {
-      optimalTemp: "15°C ~ 20°C (서늘한 기온 선호)",
-      sunlight: "반양지 또는 직사광선 4~5시간",
-      wateringCycle: "흙이 마르기 전 촉촉하게 (1~2일에 1회)",
+      optimalTemp: "15°C ~ 20°C",
+      sunlight: "하루 4시간 이상 반양지",
+      wateringCycle: "흙 표면이 마르면 매일\n(1일 1회)",
       soilType: "유기질이 풍부하고 배수가 원활한 상토"
     },
     // D-Day 절대 안전장치 (Safety Clamps)

@@ -5,15 +5,18 @@
   <meta charset="UTF-8">
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>AFK 식물키우기 | 강낭콩 &amp; 상추 D-Day 예측</title>
+  <title>AKF 식물키우기 · D-Day 예측 &amp; 생육 진단</title>
   <!-- PWA 설정 -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#2e7d32">
+  <meta name="theme-color" content="#f4f5fb">
   <link rel="apple-touch-icon" href="/icon-192.png">
-  <meta name="description" content="식물의 현재 생육 단계를 사진으로 분석하고, 완전 성장까지 남은 D-Day와 예상 완료일을 계산해주는 스마트 원예 앱입니다.">
+  <meta name="description" content="사진을 업로드하면 현재 생육 단계와 남은 D-Day를 분석해 드립니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="app.css">
   <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns=%2  2http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
 </head>
 
 <body>
@@ -24,7 +27,13 @@
     <!-- 앱 상단 고정 헤더 -->
     <header class="app-header">
       <div class="header-brand">
-        <div class="header-logo-icon" aria-hidden="true">🌱</div>
+        <div class="header-logo-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22V12" />
+            <path d="M12 12C12 7 7 4 2 4c0 7 5 8 10 8" />
+            <path d="M12 10c0-5 5-8 10-8 0 7-5 8-10 8" />
+          </svg>
+        </div>
         <div>
           <h1 class="header-title">AKF 식물키우기</h1>
           <p class="header-sub">D-Day 예측 &amp; 생육 진단</p>
@@ -33,10 +42,14 @@
       <div class="header-actions">
         <!-- 테마 토글 버튼 -->
         <button id="btn-theme-toggle" class="btn-icon" title="테마 변경" aria-label="라이트/다크 모드 전환">
-          <span id="theme-icon">🌙</span>
+          <span id="theme-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </span>
         </button>
         <button id="btn-view-history" class="btn-icon" title="성장 일지" aria-label="성장 일지 열기">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
             <path d="M6 6h10"></path>
@@ -45,24 +58,29 @@
         </button>
       </div>
     </header>
-    <!-- 실시간 날씨 & 맞춤 식물 케어 카드 (디자인 개편) -->
+    <!-- 실시간 날씨 & 맞춤 식물 케어 카드 -->
     <div id="weather-card" class="weather-card">
       <!-- 상단: 위치 날씨 상태 및 온도 배지 -->
       <div class="weather-card-top">
         <div class="weather-status-wrap">
-          <span id="weather-status" class="weather-status-text">⛅ 위치 정보 확인 중...</span>
+          <svg class="loc-pin-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="10" r="3" />
+            <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z" />
+          </svg>
+          <span id="weather-status" class="weather-status-text">위치 권한이 거부되었습니다.</span>
         </div>
         <span id="weather-temp" class="weather-temp-badge">--°C</span>
       </div>
 
-      <!-- 구분선 -->
-      <div class="weather-divider"></div>
-
-      <!-- 하단: 가독성을 높인 식물 케어 팁 -->
+      <!-- 하단: 식물 케어 팁 -->
       <div class="weather-tip-row">
-        <span class="weather-tip-icon">💡</span>
+        <svg class="weather-tip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18h6"></path>
+          <path d="M10 22h4"></path>
+          <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
+        </svg>
         <p id="plant-tip" class="weather-tip-text">
-          현재 위치의 날씨를 확인하여 맞춤형 식물 관리 팁을 준비 중입니다.
+          위치 권한을 허용하시면 실시간 날씨 맞춤 관리 팁을 받아보실 수 있습니다.
         </p>
       </div>
     </div>
@@ -73,8 +91,8 @@
       <!-- ================= 1단계: 식물 선택 화면 ================= -->
       <section id="screen-select" class="screen active" aria-labelledby="select-title">
         <div class="hero-banner">
-          <h2 id="select-title" class="hero-title">키우시는 식물을<br><span>선택해주세요</span></h2>
-          <p class="hero-desc">사진을 업로드하면 현재 생육 단계와<br>남은 D-Day를 분석해 드립니다.</p>
+          <h2 id="select-title" class="hero-title">키우시는 식물을<br><span class="hero-gradient-text text-brand-gradient">선택해주세요</span></h2>
+          <p class="hero-desc">사진을 업로드하면 현재 생육 단계와 남은<br>D-Day를 분석해 드립니다.</p>
         </div>
 
         <!-- 2가지 선택 카드 -->
@@ -82,8 +100,18 @@
           <!-- 강낭콩 카드 -->
           <article class="plant-choice-card selected" data-plant="bean" tabindex="0" role="button" aria-pressed="true"
             aria-label="강낭콩 선택">
-            <div class="card-badge">✓</div>
-            <div class="card-avatar">🌱</div>
+            <div class="card-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="card-avatar bean-avatar">
+              <svg class="plant-card-svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22V12" />
+                <path d="M12 12C12 7 7 4 2 4c0 7 5 8 10 8" />
+                <path d="M12 10c0-5 5-8 10-8 0 7-5 8-10 8" />
+              </svg>
+            </div>
             <h3 class="plant-name">강낭콩</h3>
             <p class="plant-eng">Kidney Bean</p>
             <div class="plant-cycle-tag">평균 60일</div>
@@ -92,8 +120,19 @@
           <!-- 상추 카드 -->
           <article class="plant-choice-card" data-plant="lettuce" tabindex="0" role="button" aria-pressed="false"
             aria-label="상추 선택">
-            <div class="card-badge">✓</div>
-            <div class="card-avatar">🥬</div>
+            <div class="card-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="card-avatar lettuce-avatar">
+              <svg class="plant-card-svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 11a8 8 0 0 0 16 0" />
+                <path d="M6 11c0-4 3-7 6-7s6 3 6 7" />
+                <path d="M9 11c0-2.5 1.5-5 3-5s3 2.5 3 5" />
+                <path d="M6 18h12" />
+              </svg>
+            </div>
             <h3 class="plant-name">상추</h3>
             <p class="plant-eng">Lettuce</p>
             <div class="plant-cycle-tag">평균 40일</div>
@@ -103,31 +142,69 @@
         <!-- 생육 가이드 카드 -->
         <div class="plant-detail-preview">
           <div class="guide-header">
-            <span class="guide-title-text">🌿 생육 가이드</span>
+            <div class="guide-header-left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22V12" />
+                <path d="M12 12C12 7 7 4 2 4c0 7 5 8 10 8" />
+                <path d="M12 10c0-5 5-8 10-8 0 7-5 8-10 8" />
+              </svg>
+              <span class="guide-title-text">생육 가이드</span>
+            </div>
             <div id="preview-plant-name" class="guide-plant-chip">🌱 강낭콩</div>
           </div>
 
           <div class="preview-grid">
             <div class="preview-item">
-              <span class="preview-label">재배 기간</span>
+              <span class="preview-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                재배 기간
+              </span>
               <span id="preview-total-days" class="preview-val">약 60일</span>
             </div>
             <div class="preview-item">
-              <span class="preview-label">적정 온도</span>
+              <span class="preview-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path>
+                </svg>
+                적정 온도
+              </span>
               <span id="preview-optimal-temp" class="preview-val">20°C ~ 25°C</span>
             </div>
             <div class="preview-item">
-              <span class="preview-label">일조량</span>
-              <span id="preview-sunlight" class="preview-val">6시간 이상</span>
+              <span class="preview-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <line x1="12" y1="1" x2="12" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="23"></line>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                  <line x1="1" y1="12" x2="3" y2="12"></line>
+                  <line x1="21" y1="12" x2="23" y2="12"></line>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                일조량
+              </span>
+              <span id="preview-sunlight" class="preview-val">하루 6시간 이상 직사광선</span>
             </div>
             <div class="preview-item">
-              <span class="preview-label">물주기</span>
-              <span id="preview-watering" class="preview-val">2일 1회</span>
+              <span class="preview-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                </svg>
+                물주기
+              </span>
+              <span id="preview-watering" class="preview-val">겉흙이 마르면 듬뿍<br>(2~3일에 1회)</span>
             </div>
           </div>
 
-          <!-- 심플 뱃지 칩 영역 -->
-          <div class="info-chips">
+          <!-- 심플 뱃지 칩 영역 (숨김 처리됨) -->
+          <div class="info-chips" style="display: none;">
             <div class="info-chip">📊 <span id="preview-stages-count">3단계 생육 모델</span></div>
             <div class="info-chip">🔬 형태학적 정밀 판별</div>
             <div class="info-chip">📅 D-Day 자동 계산</div>
@@ -137,7 +214,7 @@
         <!-- Sticky CTA 버튼 -->
         <div class="sticky-cta">
           <button id="btn-go-to-camera" class="btn-primary" type="button">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
               <circle cx="12" cy="13" r="4"></circle>
@@ -151,13 +228,13 @@
       <section id="screen-camera" class="screen" aria-labelledby="camera-title">
         <div class="camera-topbar">
           <button id="btn-back-to-select" class="btn-icon" title="이전으로" aria-label="식물 선택으로 돌아가기">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
           <h2 id="camera-title" class="camera-topbar-title">식물 잎 사진 촬영</h2>
           <button id="btn-switch-cam" class="btn-icon" title="카메라 전환" aria-label="전면/후면 카메라 전환">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path
                 d="M20 10c0-4.418-3.582-8-8-8s-8 3.582-8 8c0 2.21 1.005 4.21 2.613 5.587l-1.613 1.413 5 1-1-5-1.42 1.243C6.386 13.153 5.5 11.688 5.5 10c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5-2.91 6.5-6.5 6.5c-1.393 0-2.679-.439-3.73-1.189l-1.07 1.07C8.558 18.397 10.198 19 12 19c4.418 0 8-3.582 8-8z" />
             </svg>
@@ -172,22 +249,33 @@
 
           <!-- 뷰파인더 HUD 오버레이 -->
           <div class="viewfinder-hud">
-            <!-- HUD 태그: 절대 포지션으로 뷰파인더 내부에만 표시 -->
-            <div class="hud-info-tag">
-              <span class="status-pulse"></span>
-              <span>피사체 감지 중</span>
+            <!-- HUD 상단 태그들 -->
+            <div class="hud-top-tags">
+              <div class="hud-stage-badge">떡잎기 (새싹)</div>
+              <div class="hud-detect-badge">
+                <span class="status-pulse"></span>
+                <span>피사체 감지 중</span>
+              </div>
             </div>
 
+            <!-- 네 모서리 브래킷 -->
             <div class="hud-corners">
               <div class="corner-tl"></div>
               <div class="corner-tr"></div>
               <div class="corner-bl"></div>
               <div class="corner-br"></div>
-              <div class="reticle-center">
-                <div class="reticle-dot"></div>
-              </div>
             </div>
 
+            <!-- 중앙 정밀 포커스 타겟 링 (겹침 그래픽 제거 완료) -->
+            <div class="hud-center-guide">
+              <div class="dashed-circle-guide"></div>
+              <div class="target-crosshair ch-top"></div>
+              <div class="target-crosshair ch-bottom"></div>
+              <div class="target-crosshair ch-left"></div>
+              <div class="target-crosshair ch-right"></div>
+            </div>
+
+            <!-- 하단 중앙 안내 캡슐 -->
             <div class="hud-bottom-hint">
               <span class="hud-hint-text">화면 중앙에 식물의 잎과 줄기를 맞춰주세요</span>
             </div>
@@ -197,8 +285,8 @@
         <!-- 셔터 및 컨트롤 바 -->
         <div class="camera-controls">
           <button id="btn-upload-trigger" class="ctrl-side-btn" type="button">
-            <div class="icon-circle">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <div class="icon-square-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                 <circle cx="8.5" cy="8.5" r="1.5" />
                 <polyline points="21 15 16 10 5 21" />
@@ -210,20 +298,21 @@
           <input type="file" id="plantFileInput" style="display:none;" accept="image/*">
 
           <div id="btn-shutter" class="shutter-btn-outer" role="button" tabindex="0" aria-label="사진 촬영">
-            <div class="shutter-btn-inner">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#030705" stroke-width="2.5">
-                <circle cx="12" cy="12" r="9" />
-              </svg>
-            </div>
+            <div class="shutter-btn-inner"></div>
           </div>
 
-          <div style="width: 50px;"></div>
+          <div class="ctrl-dummy-spacer"></div>
         </div>
 
         <!-- 샘플 프리셋: 아코디언 토글 -->
         <div class="sample-presets-box">
           <button class="sample-toggle-btn" id="btn-sample-toggle" aria-expanded="false" aria-controls="sample-content">
-            <span>⚡ 샘플 이미지로 즉시 테스트</span>
+            <span class="sample-toggle-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              샘플 이미지로 즉시 테스트
+            </span>
             <svg class="toggle-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               stroke-width="2.5">
               <polyline points="6 9 12 15 18 9" />
@@ -440,48 +529,7 @@
       });
     }
   </script>
-  <!-- 앱 설치 유도 전체 화면 모달 -->
-  <div id="pwa-install-modal"
-    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:99999; color:white; text-align:center; padding:40px 20px; box-sizing:border-box; flex-direction:column; justify-content:center; align-items:center;">
-    <h2 style="font-size:24px; margin-bottom:10px;">📱 앱 설치 후 이용 가능합니다</h2>
-    <p style="margin-bottom:30px; color:#ccc; line-height:1.5;">식물 진단 서비스를 이용하려면<br>아래 버튼을 눌러 홈 화면에 앱을 설치해 주세요.</p>
-    <button id="btn-pwa-install"
-      style="background:#2e7d32; color:white; border:none; padding:16px 32px; font-size:18px; font-weight:bold; border-radius:12px; cursor:pointer; width:80%; max-width:300px;">
-      앱 설치하고 시작하기
-    </button>
-  </div>
-  <!-- PWA 강제 설치 모달 제어 스크립트 -->
-  <script>
-    let deferredPrompt;
-    const installModal = document.getElementById('pwa-install-modal');
-    const installBtn = document.getElementById('btn-pwa-install');
 
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-
-      if (!isStandalone) {
-        installModal.style.display = 'flex';
-      }
-    });
-
-    installBtn.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          installModal.style.display = 'none';
-        }
-        deferredPrompt = null;
-      }
-    });
-
-    window.addEventListener('appinstalled', () => {
-      installModal.style.display = 'none';
-    });
-  </script>
   <!-- 카카오톡 / PWA 통합 안내 모달 -->
   <div id="pwa-install-modal"
     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:99999; color:white; text-align:center; padding:40px 20px; box-sizing:border-box; flex-direction:column; justify-content:center; align-items:center;">

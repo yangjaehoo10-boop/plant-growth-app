@@ -92,7 +92,27 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyTheme(theme) {
     document.body.setAttribute('data-theme', theme);
     if (themeIcon) {
-      themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+      if (theme === 'light') {
+        themeIcon.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        `;
+      } else {
+        themeIcon.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        `;
+      }
     }
     if (btnThemeToggle) {
       btnThemeToggle.setAttribute('title', theme === 'light' ? '다크 모드로 전환' : '라이트 모드로 전환');
@@ -105,17 +125,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 저장된 테마 불러오기 (기본: 다크 모드)
+  // 저장된 테마 불러오기 (기본: 라이트 모드)
   try {
-    const savedTheme = localStorage.getItem('plant_theme') || 'dark';
+    const savedTheme = localStorage.getItem('plant_theme') || 'light';
     applyTheme(savedTheme);
   } catch (e) {
-    applyTheme('dark');
+    applyTheme('light');
   }
 
   if (btnThemeToggle) {
     btnThemeToggle.addEventListener('click', () => {
-      const currentTheme = document.body.getAttribute('data-theme') || 'dark';
+      const currentTheme = document.body.getAttribute('data-theme') || 'light';
       const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
       applyTheme(nextTheme);
     });
@@ -510,13 +530,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function selectPlant(plantId) {
     currentPlant = PLANTS_DATA[plantId];
     choiceCards.forEach(card => {
-      card.classList.toggle('selected', card.dataset.plant === plantId);
+      const isSel = card.dataset.plant === plantId;
+      card.classList.toggle('selected', isSel);
+      card.setAttribute('aria-pressed', String(isSel));
     });
-    if (previewPlantName) previewPlantName.textContent = `${currentPlant.emoji} ${currentPlant.name}`;
+    if (previewPlantName) previewPlantName.textContent = `🌱 ${currentPlant.name}`;
     if (previewTotalDays) previewTotalDays.textContent = `약 ${currentPlant.totalGrowthDays}일`;
     if (previewOptimalTemp) previewOptimalTemp.textContent = currentPlant.environment.optimalTemp;
     if (previewSunlight) previewSunlight.textContent = currentPlant.environment.sunlight;
-    if (previewWatering) previewWatering.textContent = currentPlant.environment.wateringCycle;
+    if (previewWatering) previewWatering.innerHTML = currentPlant.environment.wateringCycle.replace(/\n/g, '<br>');
     if (previewStagesCount) previewStagesCount.textContent = `${currentPlant.stages.length}단계 생육 모델`;
     renderSamplePresets();
   }
@@ -624,7 +646,8 @@ function fetchWeatherByLocation() {
   if (!statusEl || !tempEl || !tipEl) return;
 
   if (!navigator.geolocation) {
-    statusEl.innerText = '⚠️ 위치 정보 미지원 브라우저';
+    statusEl.innerText = '위치 권한이 거부되었습니다.';
+    tipEl.innerText = '위치 권한을 허용하시면 실시간 날씨 맞춤 관리 팁을 받아보실 수 있습니다.';
     return;
   }
 
@@ -645,35 +668,36 @@ function fetchWeatherByLocation() {
 
         tempEl.innerText = `${temp}°C`;
 
-        let statusText = '☀️ 맑음';
+        let statusText = '맑음';
         let tipText = '햇빛이 좋은 날입니다. 겉흙이 말랐다면 물을 주세요.';
 
         if ([1, 2, 3].includes(code)) {
-          statusText = '⛅ 구름 조금';
+          statusText = '구름 조금';
           tipText = '통풍이 잘 되는 창가에 식물을 두면 좋습니다.';
         } else if ([51, 53, 55, 61, 63, 65, 80, 81].includes(code)) {
-          statusText = '🌧️ 비 옴';
+          statusText = '비 옴';
           tipText = '습도가 높으니 과습에 주의하고 과도한 물주기를 피하세요.';
         } else if ([71, 73, 75, 85].includes(code)) {
-          statusText = '❄️ 눈 옴';
+          statusText = '눈 옴';
           tipText = '냉해를 입지 않도록 식물을 실내 따뜻한 곳으로 이동하세요.';
         }
 
         if (temp >= 30) {
-          tipText += ' ⚠️ 폭염 주의! 직사광선을 피하고 분무해 주세요.';
+          tipText += ' 폭염 주의! 직사광선을 피하고 분무해 주세요.';
         } else if (temp <= 5) {
-          tipText += ' ❄️ 저온 주의! 냉해 위험이 있으니 베란다에서 실내로 들여놓으세요.';
+          tipText += ' 저온 주의! 냉해 위험이 있으니 베란다에서 실내로 들여놓으세요.';
         }
 
         statusEl.innerText = statusText;
         tipEl.innerText = tipText;
 
       } catch (error) {
-        statusEl.innerText = '❌ 날씨 정보를 가져오지 못했습니다.';
+        statusEl.innerText = '위치 권한이 거부되었습니다.';
+        tipEl.innerText = '위치 권한을 허용하시면 실시간 날씨 맞춤 관리 팁을 받아보실 수 있습니다.';
       }
     },
     (error) => {
-      statusEl.innerText = '📍 위치 권한이 거부되었습니다.';
+      statusEl.innerText = '위치 권한이 거부되었습니다.';
       tipEl.innerText = '위치 권한을 허용하시면 실시간 날씨 맞춤 관리 팁을 받아보실 수 있습니다.';
     }
   );
