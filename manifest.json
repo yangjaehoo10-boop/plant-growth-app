@@ -3,9 +3,8 @@
     "short_name": "바이러스 아님(진짜로)",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
-    "icons": [
+    "theme_color": "#f4f5fb",
+    "background_color": "#f4f5fb""icons": [
         {
             "src": "/icon-192.png",
             "sizes": "192x192",
